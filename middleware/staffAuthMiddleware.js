@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
-const SuperAdmin = require("../models/SuperAdminModel");
+const Staff = require("../models/StaffModel");
 
-exports.authenticateSuperAdmin = async (req, res, next) => {
-  let token = req.body.token;
+exports.authenticateStaff = async (req, res, next) => {
+  let token = req.cookies.token;
   console.log("TOKEN - ", token);
   if (!token) {
     return res.status(401).json({
@@ -14,7 +14,7 @@ exports.authenticateSuperAdmin = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_KEY);
 
-    const user = await SuperAdmin.findById(decoded.userId);
+    const user = await Staff.findById(decoded.userId);
 
     if (!user) {
       return res.status(404).json({

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const placenentSchema = new mongoose.Schema(
+const placementSchema = new mongoose.Schema(
     {
         company: {
             type: String,
@@ -33,10 +33,12 @@ const placenentSchema = new mongoose.Schema(
         pollBool: {
             type: Boolean
         },
-        users: {
-            type: mongoose.Schema.Types.ObjectId,
+        users: [{
+            type: mongoose.SchemaTypes.ObjectId,
             ref: 'Student'
-        },
+        }],
     },
     { timestamps: true }
 );
+
+module.exports = mongoose.model("Placement", placementSchema);
