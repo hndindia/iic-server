@@ -53,11 +53,9 @@ exports.login = async (req, res) => {
 };
 
 const sendToken = (user, statusCode, res) => {
-    const token = user.getSignedToken();
-    
-    res
-      .status(statusCode).json({
-          token: token,
-      });
-  };
-  
+  const token = user.getSignedToken();
+
+  res.status(statusCode).json({
+    token: token
+  });
+};

@@ -16,13 +16,15 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+  // console.log("🔥 -> ", req.body);
   const { email, password } = req.body;
-
+  console.log("Email - ", email, "Password - ", password);
   if (!email || !password) {
     res.status(400).json({
       success: false,
       error: "The email and password field is required"
     });
+    return;
   }
 
   try {
@@ -45,9 +47,11 @@ exports.login = async (req, res) => {
 
     sendToken(user, 200, res);
   } catch (error) {
+    console.log("ERROR - ", error);
     res.status(500).json({
       success: false,
-      message: "Please enter correct email and password"
+      message: "Please enter correct email and password",
+      error
     });
   }
 };
