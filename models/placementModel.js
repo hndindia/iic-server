@@ -31,7 +31,8 @@ const placementSchema = new mongoose.Schema(
             type: Date,
         },
         pollBool: {
-            type: Boolean
+            type: Boolean,
+            default: true
         },
         users: [{
             type: mongoose.SchemaTypes.ObjectId,
