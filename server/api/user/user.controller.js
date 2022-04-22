@@ -1,10 +1,8 @@
-const Student = require("../models/StudentModel");
-const crypto = require("crypto");
-const jwt = require("jsonwebtoken");
+const User = require("../user/user.schema");
 
 exports.register = async (req, res) => {
   try {
-    const user = await Student.create(req.body);
+    const user = await User.create(req.body);
     sendToken(user, 201, res);
   } catch (error) {
     res.status(500).json({
@@ -24,11 +22,10 @@ exports.login = async (req, res) => {
       success: false,
       error: "The email and password field is required"
     });
-    return;
   }
 
   try {
-    const user = await Student.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res.status(404).json({
         success: false,

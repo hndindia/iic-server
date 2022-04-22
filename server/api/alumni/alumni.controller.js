@@ -1,4 +1,4 @@
-const { Alumni, AlumniCompany } = require("../models/alumniModel");
+const { Alumni, AlumniCompany } = require("./alumni.schema");
 
 exports.createAlumni = async (req, res) => {
   try {
@@ -38,6 +38,7 @@ exports.getAllCompany = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      total_count: data.length,
       data
     });
   } catch (error) {
@@ -48,7 +49,7 @@ exports.getAllCompany = async (req, res) => {
   }
 };
 
-exports.getAllAlumni = async (req, res) => {
+exports.getAlumniByCompanyID = async (req, res) => {
   try {
     const data = await Alumni.find({ company: req.query.company_id }).populate("company");
 
