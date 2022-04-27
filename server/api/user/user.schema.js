@@ -34,10 +34,10 @@ const userSchema = new mongoose.Schema(
       required: [true, "Please provide a branch"]
     },
     semester: {
-      type: String,
+      type: String
     },
     section: {
-      type: String,
+      type: String
     },
     percent10: {
       type: Number,
@@ -57,16 +57,10 @@ const userSchema = new mongoose.Schema(
 
     resetPasswordToken: String,
     resetPasswordExpire: Date,
-    isEmailVerified: {
-      type: Boolean,
-      default: false
-    },
-    emailVerifyToken: String,
-    emailVerifyTokenExpire: Date,
     //0 - student, 1 - Staff, 2 - Admin
-    role:{
-      type:Number,
-      default:0
+    role: {
+      type: Number,
+      default: 0
     }
   },
   { timestamps: true }
@@ -114,15 +108,6 @@ userSchema.methods.getResetPasswordToken = function () {
   this.resetPasswordExpire = Date.now() + 10 * (60 * 1000);
 
   return resetToken;
-};
-
-userSchema.methods.getEmailVerifyToken = function () {
-  const verifyToken = crypto.randomBytes(20).toString("hex");
-
-  this.emailVerifyToken = crypto.createHash("sha256").update(verifyToken).digest("hex");
-  this.emailVerifyTokenExpire = Date.now() + 10 * (60 * 1000);
-
-  return verifyToken;
 };
 
 module.exports = mongoose.model("User", userSchema);

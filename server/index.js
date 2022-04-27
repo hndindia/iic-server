@@ -6,6 +6,9 @@ const cookieParser = require("cookie-parser");
 const placementRoutes = require("./api/placement/index");
 const userRoutes = require("./api/user/index");
 const alumniRoutes = require("./api/alumni/index");
+const fs = require("fs");
+const readline = require("readline");
+const { google } = require("googleapis");
 
 app.use(express.json());
 app.use(

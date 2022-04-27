@@ -27,6 +27,10 @@ const placementSchema = new mongoose.Schema(
       type: String
       // required: [true, "Please provide a institute name"],
     },
+    rewards: {
+      type: String
+      // required: [true, "Please provide a institute name"],
+    },
     lastDate: {
       type: Date
     },
