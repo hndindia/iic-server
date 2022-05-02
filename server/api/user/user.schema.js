@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+const { ObjectId } = mongoose.Schema;
 
 const userSchema = new mongoose.Schema(
   {
@@ -30,11 +31,12 @@ const userSchema = new mongoose.Schema(
       select: false
     },
     branch: {
-      type: String,
-      required: [true, "Please provide a branch"]
+      type: ObjectId,
+      ref:"Branch"
     },
     semester: {
-      type: String
+      type: ObjectId,
+      ref:"Semester"
     },
     section: {
       type: String
