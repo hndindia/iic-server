@@ -27,16 +27,16 @@ const userSchema = new mongoose.Schema(
     },
     institute: {
       type: String,
-      required: [true, "Please provide a institute name"],
-      select: false
+      required: [true, "Please provide a institute name"]
     },
+    yop: Number,
     branch: {
       type: ObjectId,
-      ref:"Branch"
+      ref: "Branch"
     },
     semester: {
       type: ObjectId,
-      ref:"Semester"
+      ref: "Semester"
     },
     section: {
       type: String
@@ -56,7 +56,16 @@ const userSchema = new mongoose.Schema(
       min: 0,
       max: 100
     },
-
+    skills: [
+      {
+        type: String
+      }
+    ],
+    work_experience: [
+      {
+        type: String
+      }
+    ],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
     //0 - student, 1 - Staff, 2 - Admin

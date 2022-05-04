@@ -19,7 +19,9 @@ exports.isAuthenticated = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, config.jwt_key);
 
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.userId)
+      .populate("branch", "_id name")
+      .populate("semester", "_id value");
 
     if (!user) {
       return res.status(404).json({
@@ -38,12 +40,14 @@ exports.isAuthenticated = async (req, res, next) => {
 };
 
 exports.isStaff = (req, res, next) => {
-  if (req.user.role === 1 || req.user.role === 2) next();
+  if (req.user.role !== 1 && req.user.role !== 2) {
+    return res.status(401).json({
+      success: false,
+      error: "Not authorized to access this route"
+    });
+  }
 
-  return res.status(401).json({
-    success: false,
-    error: "Not authorized to access this route"
-  });
+  next();
 };
 
 exports.isAdmin = (req, res, next) => {

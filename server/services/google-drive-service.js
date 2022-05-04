@@ -30,3 +30,33 @@ module.exports.uploadFileInDrive = async (name, mimeType, path) => {
   console.log(response.data);
   return response.data;
 };
+
+module.exports.deleteFileInDrive = async (fileId) => {
+  const response = await drive.files.delete({
+    fileId
+  });
+
+  return response.status;
+};
+
+module.exports.generatePublicUrlInDrive = async (fileId) => {
+    await drive.permissions.create({
+      fileId: fileId,
+      requestBody: {
+        role: 'reader',
+        type: 'anyone',
+      },
+    });
+
+    /* 
+    webViewLink: View the file in browser
+    webContentLink: Direct download link 
+    */
+    const result = await drive.files.get({
+      fileId: fileId,
+      fields: 'webViewLink, webContentLink',
+    });
+    console.log("GD RES - ",result.data);
+    
+    return result.data;
+}
