@@ -15,7 +15,7 @@ const drive = google.drive({
   auth: oauth2Client
 });
 
-module.exports.uploadFile = async (name, mimeType, path) => {
+module.exports.uploadFileInDrive = async (name, mimeType, path) => {
   const response = await drive.files.create({
     requestBody: {
       name: name,

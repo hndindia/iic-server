@@ -8,6 +8,7 @@ const {
   getAllCompany
 } = require("./alumni.controller");
 
+//Create Company
 router.post("/alumni/add/company", isAuthenticated, createAlumniCompany);
 
 //Get company

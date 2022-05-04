@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const userSemSchema = new mongoose.Schema(
   {
     value:{
-      type: Number,
+      type: String,
       required: [true, "Please provide a Semester"]
     }
   },{timestamps: true}

@@ -1,4 +1,6 @@
 const User = require("../user/user.schema");
+const Branch = require("./master/user.branch.schema");
+const Semester = require("./master/user.semester.schema");
 
 exports.register = async (req, res) => {
   try {
@@ -58,6 +60,88 @@ exports.getUserById = (req, res) => {
     success: true,
     user: req.user
   });
+};
+
+exports.createBranch = async (req, res) => {
+  try {
+    const branch = await Branch.create(req.body);
+    
+    res.status(200).json({
+      success: true,
+      branch
+    });
+  
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error
+    });
+  }
+};
+
+exports.getAllBranch = async (req, res) => {
+  try {
+    const branches = await Branch.find();
+
+    if(!branches){
+      return res.status(404).json({
+        success: false,
+        error: "No branches found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      total_branches:branches.length,
+      branches
+    });
+  
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error
+    });
+  }
+};
+
+exports.createSemester = async (req, res) => {
+  try {
+    const semester = await Semester.create(req.body);
+    
+    res.status(200).json({
+      success: true,
+      semester
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error
+    });
+  }
+};
+
+exports.getAllSemester = async (req, res) => {
+  try {
+    const semester = await Semester.find();
+
+    if(!semester){
+      return res.status(404).json({
+        success: false,
+        error: "No branches found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      total_semester:semester.length,
+      semester
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error
+    });
+  }
 };
 
 const sendToken = (user, statusCode, res) => {

@@ -36,3 +36,23 @@ exports.isAuthenticated = async (req, res, next) => {
     });
   }
 };
+
+exports.isStaff = (req, res, next) => {
+  if (req.user.role === 1 || req.user.role === 2) next();
+
+  return res.status(401).json({
+    success: false,
+    error: "Not authorized to access this route"
+  });
+};
+
+exports.isAdmin = (req, res, next) => {
+  if (req.user.role !== 2) {
+    return res.status(401).json({
+      success: false,
+      error: "Not authorized to access this route"
+    });
+  }
+
+  next();
+};

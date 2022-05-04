@@ -6,8 +6,8 @@ const cookieParser = require("cookie-parser");
 const placementRoutes = require("./api/placement/index");
 const userRoutes = require("./api/user/index");
 const alumniRoutes = require("./api/alumni/index");
-const { uploadFile } = require("./services/google-drive-service");
-const uploadFile = require("./services/utils-service");
+const { uploadFileInDrive } = require("./services/google-drive-service");
+const {uploadFile} = require("./services/utils-service");
 
 app.use(express.json());
 app.use(
@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 
 app.post("/upload", uploadFile, async (req, res) => {
-  const r = await uploadFile(req.file.originalname, req.file.mimetype, req.file.path);
+  const r = await uploadFileInDrive(req.file.originalname, req.file.mimetype, req.file.path);
   res.json({
     r
   });
