@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+const { ObjectId } = mongoose.Schema;
 
-const studentSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     fullName: {
       type: String,
@@ -26,53 +27,57 @@ const studentSchema = new mongoose.Schema(
     },
     institute: {
       type: String,
-      required: [true, "Please provide a institute name"],
-      select: false
+      required: [true, "Please provide a institute name"]
     },
+    yop: Number,
     branch: {
-      type: String,
-      required: [true, "Please provide a branch"]
+      type: ObjectId,
+      ref: "Branch"
     },
     semester: {
-      type: String,
-      required: [true, "Please provide your semester"]
+      type: ObjectId,
+      ref: "Semester"
     },
     section: {
-      type: String,
-      required: [true, "Please provide your section"]
+      type: String
     },
     percent10: {
       type: Number,
-      required: [true, "Please provide your 10th percentage"],
       min: 0,
       max: 100
     },
     percent12: {
       type: Number,
-      required: [true, "Please provide your 12th percentage"],
       min: 0,
       max: 100
     },
     currentAggregate: {
       type: Number,
-      required: [true, "Please provide your current aggregate"],
       min: 0,
       max: 100
     },
-
+    skills: [
+      {
+        type: String
+      }
+    ],
+    work_experience: [
+      {
+        type: String
+      }
+    ],
     resetPasswordToken: String,
     resetPasswordExpire: Date,
-    isEmailVerified: {
-      type: Boolean,
-      default: false
-    },
-    emailVerifyToken: String,
-    emailVerifyTokenExpire: Date
+    //0 - student, 1 - Staff, 2 - Admin
+    role: {
+      type: Number,
+      default: 0
+    }
   },
   { timestamps: true }
 );
 
-studentSchema.pre("save", async function (next) {
+userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
   }
@@ -87,7 +92,7 @@ studentSchema.pre("save", async function (next) {
   next();
 });
 
-studentSchema.methods.matchPasswords = function (password) {
+userSchema.methods.matchPasswords = function (password) {
   return new Promise((resolve, reject) => {
     bcrypt.compare(password, this.password, (err, isMatch) => {
       if (err) {
@@ -101,13 +106,13 @@ studentSchema.methods.matchPasswords = function (password) {
   });
 };
 
-studentSchema.methods.getSignedToken = function () {
+userSchema.methods.getSignedToken = function () {
   return jwt.sign({ userId: this._id }, process.env.JWT_KEY, {
     expiresIn: process.env.JWT_EXPIRE
   });
 };
 
-studentSchema.methods.getResetPasswordToken = function () {
+userSchema.methods.getResetPasswordToken = function () {
   const resetToken = crypto.randomBytes(20).toString("hex");
 
   this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
@@ -116,13 +121,4 @@ studentSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
-studentSchema.methods.getEmailVerifyToken = function () {
-  const verifyToken = crypto.randomBytes(20).toString("hex");
-
-  this.emailVerifyToken = crypto.createHash("sha256").update(verifyToken).digest("hex");
-  this.emailVerifyTokenExpire = Date.now() + 10 * (60 * 1000);
-
-  return verifyToken;
-};
-
-module.exports = mongoose.model("Student", studentSchema);
+module.exports = mongoose.model("User", userSchema);
