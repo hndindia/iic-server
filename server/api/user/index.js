@@ -19,7 +19,7 @@ router.post("/student/auth/login", login);
 //User Routes
 router.get("/student/auth/user", isAuthenticated, getUserById);
 
-//Master Routes (Branch and Semester)
+//Master Routes (Branch and Semester) TODO add Patch and Delete
 router.post("/student/branch", isAuthenticated, isAdmin, createBranch);
 router.get("/student/branch", isAuthenticated, getAllBranch);
 
