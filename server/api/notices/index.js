@@ -1,7 +1,7 @@
 const express = require("express");
 const { isAuthenticated, isStaff } = require("../../services/auth-service");
 const { createNotice, deleteNoticeById, getNotice } = require("./notices.controller");
-const { uploadFile } = require("../../services/utils-service");
+const uploadFile  = require("../../services/utils-service");
 
 const router = express.Router();
 

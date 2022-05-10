@@ -13,7 +13,7 @@ exports.createNotice = async (req, res) => {
 
     const { id, name, mimeType } = gd_upload_res;
 
-    const { webViewLink } = await generatePublicUrlInDrive(id);
+    const { webViewLink,thumbnailLink } = await generatePublicUrlInDrive(id);
 
     const { semester, branch } = req.body;
 
@@ -23,7 +23,8 @@ exports.createNotice = async (req, res) => {
       notice_drive_id: id,
       notice_drive_name: name,
       notice_drive_mimeType: mimeType,
-      notice_drive_view_link: webViewLink
+      notice_drive_view_link: webViewLink,
+      thumbnail_link:thumbnailLink
     };
 
     const notice = await Notice.create(noticeData);
@@ -72,7 +73,10 @@ exports.getNotice = async (req, res) => {
   try {
     //?branch_id="ID"
 
-    const notice = await Notice.find({ branch: req.query.branch_id });
+    const notice = await Notice.find({ branch: req.query.branch_id })
+      .populate("semester", "_id value")
+      .populate("branch", "_id name");
+      
     if (!notice) {
       return res.status(404).json({
         success: false,

@@ -14,7 +14,8 @@ const noticesSchema = new mongoose.Schema(
     notice_drive_id:String,
     notice_drive_name:String,
     notice_drive_mimeType:String,
-    notice_drive_view_link:String
+    notice_drive_view_link:String,
+    thumbnail_link:String
   },  
   {timestamps: true}
 );
