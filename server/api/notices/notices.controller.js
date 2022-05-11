@@ -7,24 +7,23 @@ const Notice = require("./notices.schema");
 
 exports.createNotice = async (req, res) => {
   try {
-    const { originalname, mimetype, path } = req.file;
+    const { mimetype, path } = req.file;
+    const { file_name, semester, branch } = req.body;
 
-    const gd_upload_res = await uploadFileInDrive(originalname, mimetype, path);
+    const gd_upload_res = await uploadFileInDrive(file_name, mimetype, path);
 
-    const { id, name, mimeType } = gd_upload_res;
+    const { id, mimeType } = gd_upload_res;
 
-    const { webViewLink,thumbnailLink } = await generatePublicUrlInDrive(id);
-
-    const { semester, branch } = req.body;
+    const { webViewLink, thumbnailLink } = await generatePublicUrlInDrive(id);
 
     const noticeData = {
       semester,
       branch,
-      notice_drive_id: id,
-      notice_drive_name: name,
-      notice_drive_mimeType: mimeType,
-      notice_drive_view_link: webViewLink,
-      thumbnail_link:thumbnailLink
+      drive_id: id,
+      file_name,
+      mime_type: mimeType,
+      view_link: webViewLink,
+      thumbnail_link: thumbnailLink
     };
 
     const notice = await Notice.create(noticeData);
@@ -52,7 +51,7 @@ exports.deleteNoticeById = async (req, res) => {
       });
     }
 
-    const googleDriveRes = await deleteFileInDrive(notice.notice_drive_id);
+    const googleDriveRes = await deleteFileInDrive(notice.drive_id);
 
     const { deletedCount } = await Notice.deleteOne({ _id: req.params.noticeId });
 
@@ -72,11 +71,13 @@ exports.deleteNoticeById = async (req, res) => {
 exports.getNotice = async (req, res) => {
   try {
     //?branch_id="ID"
+    //TODO sort with sem and branch
 
     const notice = await Notice.find({ branch: req.query.branch_id })
+      .sort({ createdAt: -1 })
       .populate("semester", "_id value")
       .populate("branch", "_id name");
-      
+
     if (!notice) {
       return res.status(404).json({
         success: false,
