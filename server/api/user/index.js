@@ -7,7 +7,8 @@ const {
   createBranch,
   getAllBranch,
   createSemester,
-  getAllSemester
+  getAllSemester,
+  isLoggedIn
 } = require("./user.controller");
 
 const router = express.Router();
@@ -15,7 +16,9 @@ const router = express.Router();
 //Auth Routes
 router.post("/student/auth/register", register);
 router.post("/student/auth/login", login);
-//TODO create isLoggedIn
+// isLoggedIn (Common for both app and adminportal)
+router.get("/auth/isloggedin", isAuthenticated, isLoggedIn);
+
 //User Routes
 router.get("/student/auth/user", isAuthenticated, getUserById);
 

@@ -15,7 +15,6 @@ exports.createNotice = async (req, res) => {
     const { id, mimeType } = gd_upload_res;
 
     const { webViewLink, thumbnailLink } = await generatePublicUrlInDrive(id);
-
     const noticeData = {
       semester,
       branch,
@@ -23,7 +22,7 @@ exports.createNotice = async (req, res) => {
       file_name,
       mime_type: mimeType,
       view_link: webViewLink,
-      thumbnail_link: thumbnailLink
+      thumbnail_link: `https://drive.google.com/thumbnail?authuser=0&sz=w320&id=${id}`
     };
 
     const notice = await Notice.create(noticeData);

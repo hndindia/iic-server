@@ -48,14 +48,11 @@ module.exports.generatePublicUrlInDrive = async (fileId) => {
     }
   });
 
-  /* 
-      webViewLink: View the file in browser
-      webContentLink: Direct download link 
-      */
   const result = await drive.files.get({
     fileId: fileId,
     fields: "webViewLink, webContentLink, thumbnailLink"
   });
+
   console.log("GD RES - ", result.data);
 
   return result.data;

@@ -55,6 +55,13 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.isLoggedIn = (req, res) => {
+  res.status(200).json({
+    success: true,
+    "message":"You are logged in"
+  });
+};
+
 exports.getUserById = (req, res) => {
   return res.status(200).json({
     success: true,
