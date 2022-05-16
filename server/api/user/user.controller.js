@@ -69,6 +69,17 @@ exports.getUserById = (req, res) => {
   });
 };
 
+exports.updateStudent = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error
+    });
+  }
+};
+
 exports.createBranch = async (req, res) => {
   try {
     const branch = await Branch.create(req.body);

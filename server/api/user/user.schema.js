@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide a institute name"]
     },
+    course:String,
     yop: Number,
     branch: {
       type: ObjectId,
