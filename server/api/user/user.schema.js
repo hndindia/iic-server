@@ -64,7 +64,10 @@ const userSchema = new mongoose.Schema(
     ],
     work_experience: [
       {
-        type: String
+        company_name:String,
+        start_date:String,
+        end_date:String,
+        position:String
       }
     ],
     resetPasswordToken: String,

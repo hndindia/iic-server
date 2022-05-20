@@ -76,14 +76,14 @@ exports.updateStudent = async (req, res) => {
   // userData : {work_experience: []} 
   
   const { userData } = req.body;
-  console.log("user D - ", req.user.skills.length + userData.skills.length);
+  // console.log("user D - ", req.user.skills.length + userData.skills.length);
 
-  if((req.user.skills.length + userData.skills.length) > 15){
-    return res.status(500).json({
-      success:false,
-      message:"Cannot add more than 15 skills."
-    });
-  }
+  // if((req.user.skills.length + userData.skills.length) > 15){
+  //   return res.status(500).json({
+  //     success:false,
+  //     message:"Cannot add more than 15 skills."
+  //   });
+  // }
 
   try {
     const dbRes = await User.findByIdAndUpdate(
