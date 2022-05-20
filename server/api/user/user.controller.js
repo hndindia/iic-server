@@ -58,7 +58,7 @@ exports.login = async (req, res) => {
 exports.isLoggedIn = (req, res) => {
   res.status(200).json({
     success: true,
-    "message":"You are logged in"
+    message: "You are logged in"
   });
 };
 
@@ -70,8 +70,67 @@ exports.getUserById = (req, res) => {
 };
 
 exports.updateStudent = async (req, res) => {
+
+  //Only updating skills / work experience 
+  // userData : {skills: []} or
+  // userData : {work_experience: []} 
+  
+  const { userData } = req.body;
+  console.log("user D - ", req.user.skills.length + userData.skills.length);
+
+  if((req.user.skills.length + userData.skills.length) > 15){
+    return res.status(500).json({
+      success:false,
+      message:"Cannot add more than 15 skills."
+    });
+  }
+
   try {
-    
+    const dbRes = await User.findByIdAndUpdate(
+      { _id: req.user._id },
+      { $push: userData },
+      { new: true }
+    );
+    console.log("DN RES ", dbRes);
+
+    res.status(200).json({
+      success: true,
+      data: dbRes
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error
+    });
+  }
+};
+
+exports.deleteStudentData = async (req, res) => {
+  try {
+    //For now we will only allow students to delete skills and work_experience
+    //Query - ?skill_index=3 or ?work_index=3
+
+    if(Object.keys(req.query).length === 0){
+      return res.status(500).json({
+        success:false,
+        message:"Provide a query"
+      });
+    }
+
+    if(req.query.skill_index){
+      
+      req.user.skills.splice(req.query.skill_index,1);
+      
+      await req.user.save();
+
+      res.status(200).json({
+        success:true,
+        skills:req.user.skills
+      });
+    }
+    //TODO update work experience
+
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -83,12 +142,11 @@ exports.updateStudent = async (req, res) => {
 exports.createBranch = async (req, res) => {
   try {
     const branch = await Branch.create(req.body);
-    
+
     res.status(200).json({
       success: true,
       branch
     });
-  
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -101,7 +159,7 @@ exports.getAllBranch = async (req, res) => {
   try {
     const branches = await Branch.find();
 
-    if(!branches){
+    if (!branches) {
       return res.status(404).json({
         success: false,
         error: "No branches found"
@@ -110,10 +168,9 @@ exports.getAllBranch = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      total_branches:branches.length,
+      total_branches: branches.length,
       branches
     });
-  
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -125,7 +182,7 @@ exports.getAllBranch = async (req, res) => {
 exports.createSemester = async (req, res) => {
   try {
     const semester = await Semester.create(req.body);
-    
+
     res.status(200).json({
       success: true,
       semester
@@ -142,7 +199,7 @@ exports.getAllSemester = async (req, res) => {
   try {
     const semester = await Semester.find();
 
-    if(!semester){
+    if (!semester) {
       return res.status(404).json({
         success: false,
         error: "No branches found"
@@ -151,7 +208,7 @@ exports.getAllSemester = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      total_semester:semester.length,
+      total_semester: semester.length,
       semester
     });
   } catch (error) {

@@ -9,7 +9,8 @@ const {
   createSemester,
   getAllSemester,
   isLoggedIn,
-  updateStudent
+  updateStudent,
+  deleteStudentData
 } = require("./user.controller");
 
 const router = express.Router();
@@ -22,7 +23,8 @@ router.get("/auth/isloggedin", isAuthenticated, isLoggedIn);
 
 //User Routes
 router.get("/student/auth/user", isAuthenticated, getUserById);
-router.patch("/student/add", isAuthenticated, updateStudent);
+router.patch("/student/update", isAuthenticated, updateStudent);
+router.delete("/student/delete", isAuthenticated, deleteStudentData);
 
 //Master Routes (Branch and Semester) TODO add Patch and Delete
 router.post("/student/branch", isAuthenticated, isAdmin, createBranch);
