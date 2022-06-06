@@ -21,7 +21,7 @@ exports.isAuthenticated = async (req, res, next) => {
 
     const user = await User.findById(decoded.userId)
       .populate("branch", "_id name")
-      .populate("semester", "_id value");
+      .populate("semester");
 
     if (!user) {
       return res.status(404).json({
